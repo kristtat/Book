@@ -11,56 +11,53 @@ const dislikedBooks = document.getElementById("dislikedBooks");
 //function to enact submission
 
 function submission(event) {
+  //prevents default form submission behavior to retain entered information without page refresh
 
-//if page refreshes the information entered won't be deleted
+  event.preventDefault();
 
-event.preventDefault();
-  
-//variables for all values entered
-  
-const authorValue = author.value;
-const titleValue = bookTitle.value;
-const genreValue = genre.value;
-const ratingValue = parseInt(rating.value);
-const reviewValue = review.value;
+  //variables for all values entered
 
-//create the book item from entered values
-  
-const bookItem = document.createElement("li");
-	
-// 	add a class to bookItem so that it can have CSS Y
-bookItem.classList.add("book-entry");
+  const authorValue = author.value;
+  const titleValue = bookTitle.value;
+  const genreValue = genre.value;
+  const ratingValue = parseInt(rating.value);
+  const reviewValue = review.value;
 
-//insert the text inside the list item using interpolation
- 
-bookItem.innerText = `Title: ${titleValue}\nAuthor: ${authorValue}\nGenre:${genreValue}\n Rating: ${ratingValue}\n Description: ${reviewValue}`;
+  //create the book item from entered values
 
- //insert the book item inside list for loved books or disliked books
+  const bookItem = document.createElement("li");
 
-  if (ratingValue <= 2) { dislikedBooks.appendChild(bookItem);
-  } else if (ratingValue >= 3) { lovedBooks.appendChild(bookItem);
+  // 	add a class to bookItem so that it can have CSS Y
+  bookItem.classList.add("book-entry");
+
+  //insert the text inside the list item using interpolation
+
+  bookItem.innerText = `Title: ${titleValue}\nAuthor: ${authorValue}\nGenre:${genreValue}\n Rating: ${ratingValue}\n Description: ${reviewValue}`;
+
+  // Create a string variable to hold the star emojis based on the rating
+  let stars = "";
+  for (let i = 0; i < ratingValue; i++) {
+    stars += "⭐";
   }
-	
-	   // Create a string variable to hold the star emojis based on the rating
-      let stars = '';
-      for (let i = 0; i < ratingValue; i++) {
-        stars += '⭐'; 
-      }
 
-bookItem.innerText = `Title: ${titleValue}\nAuthor: ${authorValue}\nGenre: ${genreValue}\nRating: ${stars}\nReview: ${reviewValue}`;
-// 	makes it so that the First words of the book log are in bold. Y 
-bookItem.innerHTML = bookItem.innerHTML.replace(/(Author:|Title:|Genre:|Rating:|Review:)/g, '<strong>$1</strong>');
-	
-	 //list items in a descending order inside list 
-      if (ratingValue <= 2) {
-    dislikedBooks.prepend(bookItem); 
-      } else if (ratingValue >= 3) {
-     lovedBooks.prepend(bookItem); 
-      }
+  bookItem.innerText = `Title: ${titleValue}\nAuthor: ${authorValue}\nGenre: ${genreValue}\nRating: ${stars}\nReview: ${reviewValue}`;
   
+  // 	makes it so that the First words of the book log are in bold. Y
+  bookItem.innerHTML = bookItem.innerHTML.replace(
+    /(Author:|Title:|Genre:|Rating:|Review:)/g,
+    "<strong>$1</strong>"
+  );
+
+  //list items inside list
+  if (ratingValue <= 2) {
+    dislikedBooks.appendChild(bookItem);
+  } else if (ratingValue >= 3) {
+    lovedBooks.appendChild(bookItem);
+  }
+
   //empty fields after submission except ratings as it has a range
   author.value = "";
-	genre.value = ""
+  genre.value = "";
   bookTitle.value = "";
   review.value = "";
 }
